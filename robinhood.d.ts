@@ -84,18 +84,18 @@ declare namespace robinhood {
      * Revokes the current token for this session.
      * @param callback
      */
-    expire_token (callback: request.RequestCallback): void
+    expire_token(callback: request.RequestCallback): void
 
     /**
      * Returns the token for the current session.
      */
-    auth_token (): string|null
+    auth_token(): string | null
 
     /**
      * Get the current user's investment profile.
      * @param callback
      */
-    investment_profile (callback: request.RequestCallback): void
+    investment_profile(callback: request.RequestCallback): void
 
     /**
      * Return all instruments, or those for a given symbol.
@@ -109,70 +109,70 @@ declare namespace robinhood {
      * @param symbol
      * @param callback
      */
-    fundamentals (symbol: string, callback: request.RequestCallback): void
+    fundamentals(symbol: string, callback: request.RequestCallback): void
 
     /**
      * Get the popularity for a specified stock.
      * @param symbol
      * @param callback
      */
-    popularity (symbol: string, callback: request.RequestCallback): void
+    popularity(symbol: string, callback: request.RequestCallback): void
 
     /**
      * Returns account information for the current user session.
      * @param callback
      */
-    accounts (callback: request.RequestCallback): void
+    accounts(callback: request.RequestCallback): void
 
     /**
      * Get the user's quote data for a specified stock.
      * @param symbol
      * @param callback
      */
-    quote_data (symbol: string, callback: request.RequestCallback): void
-    quote_data (symbol: string[], callback: request.RequestCallback): void
+    quote_data(symbol: string, callback: request.RequestCallback): void
+    quote_data(symbol: string[], callback: request.RequestCallback): void
 
     /**
      * Get the user's order information for the given options or specific order.
      * @param options
      * @param callback
      */
-    orders (options: Options.OrdersOptions, callback: request.RequestCallback): void
-    orders (orderId: string, callback: request.RequestCallback): void
+    orders(options: Options.OrdersOptions, callback: request.RequestCallback): void
+    orders(orderId: string, callback: request.RequestCallback): void
 
     /**
      * Get the user's position information.
      * @param callback
      */
-    positions (callback: request.RequestCallback): void
+    positions(callback: request.RequestCallback): void
 
     /**
      * Get the user's nonzero position information only.
      * @param callback
      */
-    nonzero_positions (callback: request.RequestCallback): void
+    nonzero_positions(callback: request.RequestCallback): void
 
     /**
      * Place a buy order on a specified stock.
      * @param options
      * @param callback
      */
-    place_buy_order (options: Options.BuySellOptions, callback: request.RequestCallback): void
+    place_buy_order(options: Options.BuySellOptions, callback: request.RequestCallback): void
 
     /**
      * Place a sell order on a specified stock.
      * @param options
      * @param callback
      */
-    place_sell_order (options: Options.BuySellOptions, callback: request.RequestCallback): void
+    place_sell_order(options: Options.BuySellOptions, callback: request.RequestCallback): void
 
     /**
      * Cancel an order with the order object or order ID.
      * @param order
      * @param callback
      */
-    cancel_order (order: object, callback: request.RequestCallback): void
-    cancel_order (orderId: string, callback: request.RequestCallback): void
+    cancel_order(order: object, callback: request.RequestCallback): void
+    cancel_order(orderId: string, callback: request.RequestCallback): void
 
     /**
      * Get historical information for the given symbol.
@@ -181,46 +181,46 @@ declare namespace robinhood {
      * @param span
      * @param callback
      */
-    historicals (symbol: string, intv: IntervalType, span: SpanType, callback: request.RequestCallback): void
+    historicals(symbol: string, intv: IntervalType, span: SpanType, callback: request.RequestCallback): void
 
     /**
      * Get user information.
      * @param callback
      */
-    user (callback: request.RequestCallback): void
+    user(callback: request.RequestCallback): void
 
     /**
      * Returns the user's watchlists
      * @param callback
      */
-    watchlists (callback: request.RequestCallback): void
+    watchlists(callback: request.RequestCallback): void
 
     /**
      * Get the earnings information using either the symbol or instrument.
      * @param options
      * @param callback
      */
-    earnings (options: Options.EarningsOptionsWithInstrument|Options.EarningsOptionsWithSymbol, callback: request.RequestCallback): void
+    earnings(options: Options.EarningsOptionsWithInstrument | Options.EarningsOptionsWithSymbol, callback: request.RequestCallback): void
 
     /**
      * Get the user's dividends information.
      * @param callback
      */
-    dividends (callback: request.RequestCallback): void
+    dividends(callback: request.RequestCallback): void
 
     /**
      * Fetch splits for the given instrument.
      * @param instrument
      * @param callback
      */
-    splits (instrument: string, callback: request.RequestCallback): void
+    splits(instrument: string, callback: request.RequestCallback): void
 
     /**
      * Returns news for a given symbol.
      * @param symbol
      * @param callback
      */
-    news (symbol: string, callback: request.RequestCallback): void
+    news(symbol: string, callback: request.RequestCallback): void
 
     /**
      * Returns information for the given tag.
@@ -230,7 +230,7 @@ declare namespace robinhood {
      * @param tag
      * @param callback
      */
-    tag (tag: TagType, callback: request.RequestCallback): void
+    tag(tag: TagType, callback: request.RequestCallback): void
 
     /**
      * Perform a GET request against the given URL.
@@ -239,15 +239,29 @@ declare namespace robinhood {
      * @param url
      * @param callback
      */
-    url (url: string, callback: request.RequestCallback): void
+    url(url: string, callback: request.RequestCallback): void
+
+
+    /**
+     * Get the Robinhood crypto to currency pairs
+     * @param callback
+     */
+    get_currency_pairs(callback: request.RequestCallback): void
+
+    /**
+     * Get the quote data for a specified crypto symbol.
+     * @param symbol
+     * @param callback
+     */
+    get_crypto(symbol: string, callback: request.RequestCallback): void
 
     /**
      *
      * @param callback
      */
-    sp500_down (callback: request.RequestCallback): void
+    sp500_down(callback: request.RequestCallback): void
 
-    sp500_up (callback: request.RequestCallback): void
+    sp500_up(callback: request.RequestCallback): void
   }
 }
 

@@ -20,6 +20,8 @@ function RobinhoodWebApi(opts, callback) {
    * +--------------------------------+ */
   var _apiUrl = 'https://api.robinhood.com/';
 
+  var _currencyPairsUrl = 'https://nummus.robinhood.com/currency_pairs/';
+
   var _options = opts || {},
     // Private API Endpoints
     _endpoints = {
@@ -63,7 +65,9 @@ function RobinhoodWebApi(opts, callback) {
       sp500_up: 'midlands/movers/sp500/?direction=up',
       sp500_down: 'midlands/movers/sp500/?direction=down',
       news: 'midlands/news/',
-      tag: 'midlands/tags/tag/'
+      tag: 'midlands/tags/tag/',
+
+      crypto: 'marketdata/forex/quotes/'
     },
     _clientId = 'c82SH0WZOsabOXGP2sxqcj34FxkvfnWRZBKlBjFS',
     _deviceToken = 'ea9fa5c6-01e0-46c9-8430-5b422c99bd16',
@@ -137,7 +141,7 @@ function RobinhoodWebApi(opts, callback) {
       username: _private.username,
       device_token: _private.device_token
     };
-    if(_private.mfa_code) {
+    if (_private.mfa_code) {
       form.mfa_code = _private.mfa_code;
     }
     _request.post(
@@ -173,7 +177,7 @@ function RobinhoodWebApi(opts, callback) {
     );
   }
 
-  api.set_mfa_code = function(mfa_code, callback) {
+  api.set_mfa_code = function (mfa_code, callback) {
     _private.mfa_code = mfa_code;
     _login(callback);
   }
@@ -669,6 +673,37 @@ function RobinhoodWebApi(opts, callback) {
       callback
     );
   };
+
+  api.get_currency_pairs = function (callback) {
+    return request.get(
+      {
+        uri: _currencyPairsUrl,
+      },
+      callback
+    )
+  }
+
+  api.get_crypto = function (symbol, callback) {
+    return api.get_currency_pairs(function (error, response, body) {
+      if (error) {
+        return callback(error, response, body);
+      }
+
+      var assets = JSON.parse(body).results;
+      var asset = assets.find(a => a.asset_currency.code.toLowerCase() === symbol.toLowerCase());
+      if (!asset) {
+        var codes = assets.map(a => a.asset_currency.code);
+        return callback(new Error("Symbol not found. Only these codes are allowed: " + JSON.stringify(codes)));
+      }
+
+      return _request.get(
+        {
+          uri: _apiUrl + _endpoints.crypto + asset.id + '/'
+        },
+        callback
+      );
+    });
+  }
 
   _init(_options);
 
