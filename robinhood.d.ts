@@ -45,7 +45,7 @@ declare namespace robinhood {
   export type SpanType = SpanTypes
   export type TriggerType = TriggerTypes
   export type TimeInForceType = TimeInForceTypes
-  export type InitCallback = () => void
+  export type InitCallback = (data?: any) => void
 
   export type TagTypes =
     '10-most-popular'
