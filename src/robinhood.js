@@ -718,7 +718,14 @@ function RobinhoodWebApi(opts, callback) {
         'time_in_force': options.time || 'gtc',
         'type': options.type || 'limit'
     }
-    return _request.post(
+    var local_request = request.defaults({
+      headers: Object.assign({}, _private.headers, {
+        Host: 'nummus.robinhood.com',
+      }),
+      json: true,
+      gzip: true
+    });
+    return local_request.post(
       {
         uri: _cryptoOrdersUrl,
         form: payload
