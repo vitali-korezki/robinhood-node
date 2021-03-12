@@ -707,62 +707,87 @@ function RobinhoodWebApi(opts, callback) {
     });
   }
   
-  var _place_crypto_order = function (options) {
-    var payload = {
-        'account_id': _private.account,
-        'currency_pair_id': options.currency_pair_id,
-        'price': options.bid_price,
-        'quantity': options.quantity,
-        'ref_id': uuidv4(),
-        'side': options.transaction,
-        'time_in_force': options.time || 'gtc',
-        'type': options.type || 'limit'
-    }
-    /*
-    fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: new FormData(postData)
-    })
-    */
-    /*
-    var local_request = request.defaults({
-      headers: Object.assign({}, _private.headers, {
-        Host: 'nummus.robinhood.com',
-        // 'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      }),
+  var _place_crypto_order = function (options, callback) {
+    var newHeaders = Object.assign({}, _private.headers, {
+      Host: 'nummus.robinhood.com',
+      "accept-encoding": "gzip, deflate",
+      "accept-language": "de-de",
+      // "accept-language": "en;q=1, fr;q=0.9, de;q=0.8, ja;q=0.7, nl;q=0.6, it;q=0.5",
+      // "content-type": "application/json",
+      // "accept": "application/json",
+      // "connection": "keep-alive",
+      // "origin": "https://robinhood.com",
+      "user-agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 14_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148",
+    });
+    // get account id
+    // fetch('https://nummus.robinhood.com/accounts/', {
+    //   headers: newHeaders
+    // }).then(res => {
+    //   console.log(res);
+    // }).catch(err => {
+    //   console.err(err);
+    // });
+
+    var local_getrequest = request.defaults({
+      headers: newHeaders,
       json: true,
       gzip: true
     });
-    return local_request.post(
+    local_getrequest.get(
       {
-        uri: _cryptoOrdersUrl,
-        form: payload
+        uri: 'https://nummus.robinhood.com/accounts/',
       },
-      callback
-    );*/
-    return fetch(_cryptoOrdersUrl, {
-        method: 'POST',
-        headers: Object.assign({}, _private.headers, {
-          Host: 'nummus.robinhood.com',
-          // 'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        }),
-        body: JSON.stringify( payload )
-    });
+      function(err, res, body) {
+        if (err || !body || !body.results || !body.results[0] || !body.results[0].id) {
+          return callback(err, res, null);
+        }
+
+        var account_id = body.results[0].id;
+
+        var payload = {
+          'account_id': account_id,
+          'currency_pair_id': options.currency_pair_id,
+          'price': options.bid_price,
+          'quantity': options.quantity,
+          'ref_id': uuidv4(),
+          'side': options.transaction,
+          'time_in_force': options.time || 'gtc',
+          'type': options.type || 'limit'
+        }
+
+        var local_postrequest = request.defaults({
+          headers: Object.assign({}, newHeaders, {
+            "content-type": "application/json"
+          }),
+          json: true,
+          gzip: true
+        });
+
+        return local_postrequest.post(
+          {
+            uri: _cryptoOrdersUrl,
+            headers: Object.assign({}, newHeaders, {
+              "content-type": "application/json"
+            }),
+            body: payload,
+            json: true,
+            gzip: true
+          },
+          callback
+        );
+      }
+    );
+    return;
   };
 
-  api.place_buy_order_crypto = function (options) {
+  api.place_buy_order_crypto = function (options, callback) {
     options.transaction = 'buy';
-    return _place_crypto_order(options);
+    return _place_crypto_order(options, callback);
   };
 
-  api.place_sell_order_crypto = function (options) {
+  api.place_sell_order_crypto = function (options, callback) {
     options.transaction = 'sell';
-    return _place_crypto_order(options);
+    return _place_crypto_order(options, callback);
   };
 
   _init(_options);
