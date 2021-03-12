@@ -37,6 +37,14 @@ declare namespace robinhood {
       trigger: TriggerType
       time: TimeInForceType
     }
+    
+    interface BuySellCrypto {
+      type: OrderType
+      quantity: number
+      bid_price: number
+      currency_pair_id: string
+      time: TimeInForceType
+    }
   }
 
   export type TagType = TagTypes
@@ -254,6 +262,20 @@ declare namespace robinhood {
      * @param callback
      */
     get_crypto(symbol: string, callback: request.RequestCallback): void
+    
+    /**
+     * Place a buy order on a specified stock.
+     * @param options
+     * @param callback
+     */
+    place_buy_order_crypto(options: Options.BuySellCrypto, callback: request.RequestCallback): void
+
+    /**
+     * Place a sell order on a specified stock.
+     * @param options
+     * @param callback
+     */
+    place_sell_order_crypto(options: Options.BuySellCrypto, callback: request.RequestCallback): void
 
     /**
      *
