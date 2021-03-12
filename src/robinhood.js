@@ -704,6 +704,36 @@ function RobinhoodWebApi(opts, callback) {
       );
     });
   }
+  
+  var _place_crypto_order = function (options, callback) {
+    var payload = {
+        'account_id': _private.account,
+        'currency_pair_id': options.currency_pair_id,
+        'price': options.bid_price,
+        'quantity': options.quantity,
+        'ref_id': uuidv4(),
+        'side': options.transaction,
+        'time_in_force': options.time || 'gtc',
+        'type': options.type || 'limit'
+    }
+    return _request.post(
+      {
+        uri: _apiUrl + _endpoints.orders,
+        form: payload
+      },
+      callback
+    );
+  };
+
+  api.place_buy_order_crypto = function (options, callback) {
+    options.transaction = 'buy';
+    return _place_crypto_order(options, callback);
+  };
+
+  api.place_sell_order_crypto = function (options, callback) {
+    options.transaction = 'sell';
+    return _place_crypto_order(options, callback);
+  };
 
   _init(_options);
 
