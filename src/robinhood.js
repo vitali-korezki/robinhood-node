@@ -755,14 +755,14 @@ function RobinhoodWebApi(opts, callback) {
     });
   };
 
-  api.place_buy_order_crypto = function (options, callback) {
+  api.place_buy_order_crypto = function (options) {
     options.transaction = 'buy';
-    return _place_crypto_order(options, callback);
+    return _place_crypto_order(options);
   };
 
-  api.place_sell_order_crypto = function (options, callback) {
+  api.place_sell_order_crypto = function (options) {
     options.transaction = 'sell';
-    return _place_crypto_order(options, callback);
+    return _place_crypto_order(options);
   };
 
   _init(_options);
