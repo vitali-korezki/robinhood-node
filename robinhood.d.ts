@@ -266,16 +266,16 @@ declare namespace robinhood {
     /**
      * Place a buy order on a specified stock.
      * @param options
-     * @param callback
+     * @return Promise
      */
-    place_buy_order_crypto(options: Options.BuySellCrypto, callback: request.RequestCallback): void
+    place_buy_order_crypto(options: Options.BuySellCrypto): Promise<res>
 
     /**
      * Place a sell order on a specified stock.
      * @param options
      * @param callback
      */
-    place_sell_order_crypto(options: Options.BuySellCrypto, callback: request.RequestCallback): void
+    place_sell_order_crypto(options: Options.BuySellCrypto): Promise<res>
 
     /**
      *
