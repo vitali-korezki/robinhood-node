@@ -21,6 +21,8 @@ function RobinhoodWebApi(opts, callback) {
   var _apiUrl = 'https://api.robinhood.com/';
 
   var _currencyPairsUrl = 'https://nummus.robinhood.com/currency_pairs/';
+  
+  var _cryptoOrdersUrl = 'https://nummus.robinhood.com/orders/';
 
   var _options = opts || {},
     // Private API Endpoints
@@ -718,7 +720,7 @@ function RobinhoodWebApi(opts, callback) {
     }
     return _request.post(
       {
-        uri: _apiUrl + _endpoints.orders,
+        uri: _cryptoOrdersUrl,
         form: payload
       },
       callback
