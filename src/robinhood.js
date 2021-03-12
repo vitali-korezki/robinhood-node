@@ -707,7 +707,7 @@ function RobinhoodWebApi(opts, callback) {
     });
   }
   
-  var _place_crypto_order = function (options, callback) {
+  var _place_crypto_order = function (options) {
     var payload = {
         'account_id': _private.account,
         'currency_pair_id': options.currency_pair_id,
@@ -727,6 +727,7 @@ function RobinhoodWebApi(opts, callback) {
         body: new FormData(postData)
     })
     */
+    /*
     var local_request = request.defaults({
       headers: Object.assign({}, _private.headers, {
         Host: 'nummus.robinhood.com',
@@ -742,7 +743,16 @@ function RobinhoodWebApi(opts, callback) {
         form: payload
       },
       callback
-    );
+    );*/
+    return fetch(_cryptoOrdersUrl, {
+        method: 'POST',
+        headers: Object.assign({}, _private.headers, {
+          Host: 'nummus.robinhood.com',
+          // 'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }),
+        body: JSON.stringify( payload )
+    });
   };
 
   api.place_buy_order_crypto = function (options, callback) {
