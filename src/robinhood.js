@@ -718,9 +718,20 @@ function RobinhoodWebApi(opts, callback) {
         'time_in_force': options.time || 'gtc',
         'type': options.type || 'limit'
     }
+    /*
+    fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: new FormData(postData)
+    })
+    */
     var local_request = request.defaults({
       headers: Object.assign({}, _private.headers, {
         Host: 'nummus.robinhood.com',
+        // 'Accept': 'application/json',
+        'Content-Type': 'application/json'
       }),
       json: true,
       gzip: true
