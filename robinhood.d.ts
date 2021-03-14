@@ -37,7 +37,7 @@ declare namespace robinhood {
       trigger: TriggerType
       time: TimeInForceType
     }
-    
+
     interface BuySellCrypto {
       type: OrderType
       quantity: number
@@ -276,6 +276,19 @@ declare namespace robinhood {
      * @param callback
      */
     place_sell_order_crypto(options: Options.BuySellCrypto, callback: request.RequestCallback): void
+
+    /**
+     * Read crypto orders
+     * @param callback
+     */
+    crypto_orders(callback: request.RequestCallback): void
+
+    /**
+     * Read crypto orders
+     * @param callback
+     */
+    cancel_crypto_order(url: string, callback: request.RequestCallback): void
+
 
     /**
      *
