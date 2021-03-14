@@ -21,7 +21,7 @@ function RobinhoodWebApi(opts, callback) {
   var _apiUrl = 'https://api.robinhood.com/';
 
   var _currencyPairsUrl = 'https://nummus.robinhood.com/currency_pairs/';
-  
+
   var _cryptoOrdersUrl = 'https://nummus.robinhood.com/orders/';
 
   var _options = opts || {},
@@ -70,6 +70,19 @@ function RobinhoodWebApi(opts, callback) {
       tag: 'midlands/tags/tag/',
 
       crypto: 'marketdata/forex/quotes/'
+    },
+    cryptoendpoints = {
+      auth: 'https://api.robinhood.com/oauth2/token/',
+      currency_pairs: 'nummus.robinhood.com/currency_pairs',
+      quotes: 'https://api.robinhood.com/marketdata/forex/quotes/{}/',
+      historicals: 'https://api.robinhood.com/marketdata/forex/historicals/{}/?interval={}&span={}&bounds={}',
+      orders: 'https://nummus.robinhood.com/orders/',
+      order_status: 'https://nummus.robinhood.com/orders/{}', // order id
+      order_cancel: 'https://nummus.robinhood.com/orders/{}/cancel/',
+      nummus_accounts: 'https://nummus.robinhood.com/accounts/',
+      holdings: 'https://nummus.robinhood.com/holdings/',
+      api_accounts: 'https://api.robinhood.com/accounts/',
+      portfolios: 'https://api.robinhood.com/accounts/{}/portfolio/'
     },
     _clientId = 'c82SH0WZOsabOXGP2sxqcj34FxkvfnWRZBKlBjFS',
     _deviceToken = 'ea9fa5c6-01e0-46c9-8430-5b422c99bd16',
@@ -706,8 +719,15 @@ function RobinhoodWebApi(opts, callback) {
       );
     });
   }
-  
-  var _place_crypto_order = function (options, callback) {
+
+  var _crypto_request = null;
+
+  /**
+   *
+   * @param { [key: string]: string } localheader Options to overwrite
+   * @returns {request.RequestAPI<request.Request, request.CoreOptions, request.RequiredUriUrl>}
+   */
+  var _get_crypto_request = function(localheader = {}) {
     var newHeaders = Object.assign({}, _private.headers, {
       Host: 'nummus.robinhood.com',
       "accept-encoding": "gzip, deflate",
@@ -718,7 +738,18 @@ function RobinhoodWebApi(opts, callback) {
       // "connection": "keep-alive",
       // "origin": "https://robinhood.com",
       "user-agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 14_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148",
+    }, localheader);
+
+    _crypto_request = _crypto_request || request.defaults({
+      headers: newHeaders,
+      json: true,
+      gzip: true
     });
+
+    return _crypto_request;
+  }
+
+  var _place_crypto_order = function (options, callback) {
     // get account id
     // fetch('https://nummus.robinhood.com/accounts/', {
     //   headers: newHeaders
@@ -728,14 +759,11 @@ function RobinhoodWebApi(opts, callback) {
     //   console.err(err);
     // });
 
-    var local_getrequest = request.defaults({
-      headers: newHeaders,
-      json: true,
-      gzip: true
-    });
+    var local_getrequest = _get_crypto_request();
+
     local_getrequest.get(
       {
-        uri: 'https://nummus.robinhood.com/accounts/',
+        uri: cryptoendpoints.nummus_accounts,
       },
       function(err, res, body) {
         if (err || !body || !body.results || !body.results[0] || !body.results[0].id) {
@@ -755,20 +783,16 @@ function RobinhoodWebApi(opts, callback) {
           'type': options.type || 'limit'
         }
 
-        var local_postrequest = request.defaults({
-          headers: Object.assign({}, newHeaders, {
-            "content-type": "application/json"
-          }),
-          json: true,
-          gzip: true
+        var local_postrequest = _get_crypto_request({
+          "content-type": "application/json"
         });
 
         return local_postrequest.post(
           {
             uri: _cryptoOrdersUrl,
-            headers: Object.assign({}, newHeaders, {
-              "content-type": "application/json"
-            }),
+            // headers: Object.assign({}, newHeaders, {
+            //   "content-type": "application/json"
+            // }),
             body: payload,
             json: true,
             gzip: true
@@ -788,6 +812,26 @@ function RobinhoodWebApi(opts, callback) {
   api.place_sell_order_crypto = function (options, callback) {
     options.transaction = 'sell';
     return _place_crypto_order(options, callback);
+  };
+
+  /**
+   * Get crypto orders
+   * @param {request.RequestCallback} callback
+   */
+  api.crypto_orders = function (callback) {
+    var local_getrequest = _get_crypto_request();
+
+    local_getrequest.get({
+      uri: cryptoendpoints.orders
+    }, callback);
+  };
+
+  api.cancel_crypto_order = function (url, callback) {
+    var local_getrequest = _get_crypto_request();
+
+    local_getrequest.get({
+      uri: url
+    }, callback);
   };
 
   _init(_options);
