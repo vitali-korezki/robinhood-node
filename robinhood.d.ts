@@ -289,6 +289,12 @@ declare namespace robinhood {
      */
     cancel_crypto_order(url: string, callback: request.RequestCallback): void
 
+    /**
+     * Read crypto orders
+     * @param callback
+     */
+    crypto_order_status(orderid: string, callback: request.RequestCallback): void
+
 
     /**
      *
