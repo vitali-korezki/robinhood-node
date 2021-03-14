@@ -834,6 +834,14 @@ function RobinhoodWebApi(opts, callback) {
     }, callback);
   };
 
+  api.crypto_order_status = function (orderid, callback) {
+    var local_getrequest = _get_crypto_request();
+
+    local_getrequest.get({
+      uri: cryptoendpoints.order_status.replace('{}', orderid)
+    }, callback);
+  };
+
   _init(_options);
 
   return api;
