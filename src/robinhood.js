@@ -737,7 +737,7 @@ function RobinhoodWebApi(opts, callback) {
       // "accept": "application/json",
       // "connection": "keep-alive",
       // "origin": "https://robinhood.com",
-      "user-agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 14_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148",
+      "user-agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 14_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/87.0.4280.77 Mobile/15E148 Safari/604.1",
     }, localheader);
 
     _crypto_request = _crypto_request || request.defaults({
@@ -829,7 +829,7 @@ function RobinhoodWebApi(opts, callback) {
   api.cancel_crypto_order = function (url, callback) {
     var local_getrequest = _get_crypto_request();
 
-    local_getrequest.get({
+    local_getrequest.post({
       uri: url
     }, callback);
   };
